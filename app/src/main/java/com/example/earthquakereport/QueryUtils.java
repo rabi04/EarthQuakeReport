@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,7 +57,9 @@ public final class QueryUtils {
             for(int i=0;i < features.length();i++){
                 JSONObject currentEarthQuake = features.optJSONObject(i);
                 JSONObject property = currentEarthQuake.optJSONObject("properties");
-                int mag = property.getInt("mag");
+                double mag = property.getDouble("mag");
+                DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                String magnitude = decimalFormat.format(mag);
                 String place = property.getString("place");
                 // conveting millisecond to date logic start from 62 end at 66
                 long timeInMilliSec = property.getLong("time");
@@ -66,7 +69,7 @@ public final class QueryUtils {
                 ///tto get time from milliseconds.
                 SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
                 String timeDisplay = timeFormat.format(dataObject);
-                earthquakes.add(new QuakeData(Integer.toString(mag),place,dateToDisplay,timeDisplay));
+                earthquakes.add(new QuakeData( magnitude,place,dateToDisplay,timeDisplay));
             }
 
             // build up a list of Earthquake objects with the corresponding data.
